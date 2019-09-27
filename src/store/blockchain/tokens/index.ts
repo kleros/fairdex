@@ -1,10 +1,11 @@
 import { Action, ActionCreator, AnyAction, Reducer } from 'redux';
 
-import { getErc20Contract } from '../../../contracts';
+import { getBadgeContract, getErc20Contract, getTokensViewContract } from '../../../contracts';
 import { toDecimal, ZERO } from '../../../contracts/utils';
 import { loadAuctions } from '../auctions';
 import { getCurrentAccount, getNetworkType } from '../web3';
 
+import networks from './networks.json';
 import { getAllTokens } from './selectors';
 import TokenWhitelist from './whitelist';
 
@@ -71,7 +72,15 @@ export function loadTokens() {
     const accountAddress = getCurrentAccount(getState());
     const network = getNetworkType(getState());
 
-    const whitelist = new TokenWhitelist(network);
+    const erc20Badge = getBadgeContract(networks.ERC20Badge[network].address);
+    const tokensWithBadge = await erc20Badge.getAddressesWithBadge();
+
+    const tokensView = getTokensViewContract(
+      networks.TokensView[network].address,
+      networks.T2CR[network].address,
+    );
+    const tokenIDs = await tokensView.getTokensIDsForAddresses(tokensWithBadge);
+    const whitelist = new TokenWhitelist(await tokensView.getTokens(tokenIDs));
 
     if (accountAddress) {
       const markets: Market[] = (await dx.getAvailableMarkets()).filter(([token1, token2]) => {

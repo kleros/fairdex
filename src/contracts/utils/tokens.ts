@@ -1,5 +1,7 @@
 import { ZERO } from './decimal';
 
+export const ZERO_ID = '0x0000000000000000000000000000000000000000000000000000000000000000';
+
 export function getDxBalance(token?: Token) {
   if (!token || !token.balance || !token.balance.length) {
     return ZERO;

@@ -1,21 +1,16 @@
-import mainTokens from './whitelist/mainnet.json';
-
 interface TokenStatus {
   address: Address;
   name: string;
   symbol: string;
   etherScanLink?: string;
+  decimals?: number;
 }
-
-const whitelist: { [network in Network]?: TokenStatus[] } = { main: mainTokens };
 
 class TokenWhitelist {
   readonly whitelist?: TokenStatus[];
 
-  constructor(readonly network?: Network | null) {
-    if (network) {
-      this.whitelist = whitelist[network];
-    }
+  constructor(whitelist?: TokenStatus[]) {
+    this.whitelist = whitelist;
   }
 
   isWhitelisted(token: Address) {

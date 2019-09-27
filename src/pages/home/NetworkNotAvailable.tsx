@@ -44,7 +44,7 @@ const NetworkNotAvailable: FunctionComponent<Props> = ({
       <Content>
         <h2>This ÐApp is not available on your network</h2>
         <Separator />
-        <p>Make sure you're connected to the Rinkeby Test Network</p>
+        <p>Make sure you're connected to either Mainnet or Rinkeby Test Network</p>
       </Content>
       <Logos />
     </Container>

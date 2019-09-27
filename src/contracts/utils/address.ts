@@ -1,5 +1,7 @@
 const ADDRESS_REGEX = /^0x[0-9a-fA-F]{40}$/;
 
+export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+
 /**
  * Shorten an Ethereum address. `charsLength` allows to change the number of
  * characters on both sides of the ellipsis.

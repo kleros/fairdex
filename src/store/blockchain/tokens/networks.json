@@ -1,0 +1,26 @@
+{
+  "TokensView": {
+    "main": {
+      "address": "0xf9b9b5440340123b21bff1ddafe1ad6feb9d6e7f"
+    },
+    "kovan": {
+      "address": "0x4dbba835bfb14e8abae3e525bbf2f26340110527"
+    }
+  },
+  "ERC20Badge": {
+    "main": {
+      "address": "0xcb4aae35333193232421e86cd2e9b6c91f3b125f"
+    },
+    "kovan": {
+      "address": "0x78895ec026aeff2db73bc30e623c39e1c69b1386"
+    }
+  },
+  "T2CR": {
+    "main": {
+      "address": "0xebcf3bca271b26ae4b162ba560e243055af0e679"
+    },
+    "kovan": {
+      "address": "0x25dd2659a1430cdbd678615c7409164ae486c146"
+    }
+  }
+}
