@@ -4,6 +4,7 @@ interface TokenStatus {
   symbol: string;
   etherScanLink?: string;
   decimals?: number;
+  hasTrueCryptosystemBadge?: boolean;
 }
 
 class TokenWhitelist {

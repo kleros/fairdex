@@ -9,6 +9,7 @@ interface Token {
   priceEth?: BigNumber;
   allowance?: BigNumber;
   tradeable?: boolean;
+  hasTrueCryptosystemBadge?: boolean;
 }
 
 interface TokenWithBalance extends Token {

@@ -22,5 +22,13 @@
     "kovan": {
       "address": "0x25dd2659a1430cdbd678615c7409164ae486c146"
     }
+  },
+  "TrueCryptosystemBadge": {
+    "main": {
+      "address": "0xe0cf18e8630545aa553f88079c75dae56b8fb304"
+    },
+    "kovan": {
+      "address": "0x8609b256281e17bbb63eb77d20647d96825b2dfa"
+    }
   }
 }

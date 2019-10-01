@@ -73,14 +73,23 @@ export function loadTokens() {
     const network = getNetworkType(getState());
 
     const erc20Badge = getBadgeContract(networks.ERC20Badge[network].address);
-    const tokensWithBadge = await erc20Badge.getAddressesWithBadge();
+    const trueCryptosystemBadge = getBadgeContract(networks.TrueCryptosystemBadge[network].address);
+    const [tokensWithERC20Badge, tokensWithTrueCryptosystemBadge] = await Promise.all([
+      erc20Badge.getAddressesWithBadge(),
+      trueCryptosystemBadge.getAddressesWithBadge(),
+    ]);
 
     const tokensView = getTokensViewContract(
       networks.TokensView[network].address,
       networks.T2CR[network].address,
     );
-    const tokenIDs = await tokensView.getTokensIDsForAddresses(tokensWithBadge);
-    const whitelist = new TokenWhitelist(await tokensView.getTokens(tokenIDs));
+    const tokenIDs = await tokensView.getTokensIDsForAddresses(tokensWithERC20Badge);
+    const whitelist = new TokenWhitelist(
+      (await tokensView.getTokens(tokenIDs)).map(token => ({
+        ...token,
+        hasTrueCryptosystemBadge: tokensWithTrueCryptosystemBadge.includes(token.address),
+      })),
+    );
 
     if (accountAddress) {
       const markets: Market[] = (await dx.getAvailableMarkets()).filter(([token1, token2]) => {
@@ -111,14 +120,11 @@ export function loadTokens() {
         Array.from(tokenAddresses.values()).map<Promise<Token>>(async tokenAddress => {
           const token = await getErc20Contract(tokenAddress).getTokenInfo();
 
-          // Get token data from whitelist if needed
-          if (!token.name || !token.symbol) {
-            const whitelisted = whitelist.getTokenData(tokenAddress);
-
-            if (whitelisted) {
-              token.name = token.name || whitelisted.name;
-              token.symbol = token.symbol || whitelisted.symbol;
-            }
+          const whitelisted = whitelist.getTokenData(tokenAddress);
+          if (whitelisted) {
+            token.hasTrueCryptosystemBadge = whitelisted.hasTrueCryptosystemBadge;
+            token.name = token.name || whitelisted.name;
+            token.symbol = token.symbol || whitelisted.symbol;
           }
 
           // Tokens are tradeable by default

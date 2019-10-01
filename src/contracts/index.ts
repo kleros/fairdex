@@ -6,7 +6,7 @@ import Weth from './Weth';
 const cache = new Map<Address, Erc20Token>();
 let weth: Weth;
 let tokensView: TokensView;
-let erc20Badge: BadgeContract;
+const badgeCache = new Map<Address, BadgeContract>();
 
 export function getErc20Contract(tokenAddress: Address) {
   const contract = cache.get(tokenAddress) || new Erc20Token(tokenAddress);
@@ -39,10 +39,10 @@ export function getTokensViewContract(address: Address, target: Address) {
 }
 
 export function getBadgeContract(address: Address) {
-  const contract = erc20Badge || new BadgeContract(address);
+  const contract = badgeCache.get(address) || new BadgeContract(address);
 
-  if (contract != null && !weth) {
-    erc20Badge = contract;
+  if (contract != null && !badgeCache.has(address)) {
+    badgeCache.set(address, contract);
   }
 
   return contract;
