@@ -4,10 +4,8 @@ import { connect } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { getNetworkType, init } from '../../store/blockchain';
-import { isTermsConditionsAccepted } from '../../store/terms-conditions';
 import Landing from './Landing';
 import spinner from './spinner';
-import TermsAndConditions from './TermsAndConditions';
 
 const MainPage = Loadable({
   loader: () => import('../main'),
@@ -27,7 +25,6 @@ const SelectWallet = Loadable({
 interface HomePageStateProps {
   network?: Network | null;
   wallet?: Wallet;
-  termsConditionsAccepted: boolean;
 }
 
 interface DispatchProps {
@@ -45,7 +42,6 @@ const HomePage = React.memo(({ network, wallet, initWallet }: Props) => {
       <Router>
         <Switch>
           <Route exact path='/' component={Landing} />
-          <Route exact path='/terms-conditions' component={TermsAndConditions} />
           <Route path='/select-wallet' exact component={SelectWallet} />
           <Route path='/network-not-available' exact component={NetworkNotAvailable} />
           <Route component={MainPage} />
@@ -59,7 +55,6 @@ function mapStateToProps(state: AppState): HomePageStateProps {
   return {
     network: getNetworkType(state),
     wallet: state.blockchain.wallet,
-    termsConditionsAccepted: isTermsConditionsAccepted(state),
   };
 }
 

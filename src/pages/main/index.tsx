@@ -9,7 +9,6 @@ import { TimerProvider } from '../../components/formatters';
 import Spinner from '../../components/Spinner';
 import fairdex from '../../images/fairdex.png';
 import { getNetworkType } from '../../store/blockchain';
-import { isTermsConditionsAccepted } from '../../store/terms-conditions';
 import { ClaimProvider } from './auctions/claim/ClaimContext';
 
 import { Content, Filters, Layout, MessageHandler, NavBar, Sidebar } from './layout';
@@ -42,7 +41,6 @@ const WalletOverview = Loadable({
 interface Props {
   network?: Network | null;
   wallet?: Wallet;
-  termsConditionsAccepted: boolean;
 }
 
 const AVAILABLE_NETWORKS = ['main', 'rinkeby'];
@@ -56,11 +54,9 @@ class MainPage extends React.Component<Props> {
   }
 
   render() {
-    const { termsConditionsAccepted, wallet, network } = this.props;
+    const { wallet, network } = this.props;
 
-    if (!termsConditionsAccepted) {
-      return <Redirect to='/terms-conditions' />;
-    } else if (!wallet || !network) {
+    if (!wallet || !network) {
       return <Redirect to='/select-wallet' />;
     } else if (wallet && !network) {
       return Spinner;
@@ -151,7 +147,6 @@ function mapStateToProps(state: AppState): Props {
   return {
     network: getNetworkType(state),
     wallet: state.blockchain.wallet,
-    termsConditionsAccepted: isTermsConditionsAccepted(state),
   };
 }
 

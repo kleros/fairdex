@@ -2,7 +2,6 @@ import React, { FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { getNetworkType, init } from '../../store/blockchain';
-import { isTermsConditionsAccepted } from '../../store/terms-conditions';
 
 import Logos from '../../components/Logos';
 import Separator from '../../components/Separator';
@@ -15,22 +14,14 @@ type Props = NetworkNotAvailableStateProps & DispatchProps;
 interface NetworkNotAvailableStateProps {
   network?: Network | null;
   wallet?: Wallet;
-  termsConditionsAccepted: boolean;
 }
 
 interface DispatchProps {
   initializeWallet: (wallet: Wallet) => void;
 }
 
-const NetworkNotAvailable: FunctionComponent<Props> = ({
-  network,
-  wallet,
-  termsConditionsAccepted,
-  initializeWallet,
-}) => {
-  if (!termsConditionsAccepted) {
-    return <Redirect to='/terms-conditions' />;
-  } else if (!wallet) {
+const NetworkNotAvailable: FunctionComponent<Props> = ({ network, wallet, initializeWallet }) => {
+  if (!wallet) {
     return <Redirect to='/select-wallet' />;
   } else if (!network) {
     initializeWallet(wallet);
@@ -55,7 +46,6 @@ function mapStateToProps(state: AppState): NetworkNotAvailableStateProps {
   return {
     network: getNetworkType(state),
     wallet: state.blockchain.wallet,
-    termsConditionsAccepted: isTermsConditionsAccepted(state),
   };
 }
 

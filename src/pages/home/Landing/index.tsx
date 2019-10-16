@@ -7,7 +7,6 @@ import Card from '../../../components/Card';
 import Logos from '../../../components/Logos';
 import * as images from '../../../images';
 import { getNetworkType } from '../../../store/blockchain';
-import { isTermsConditionsAccepted } from '../../../store/terms-conditions';
 import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
@@ -17,14 +16,13 @@ import Step5 from './Step5';
 interface LandingStateProps {
   network?: Network | null;
   wallet?: Wallet;
-  termsConditionsAccepted: boolean;
 }
 
 type Props = LandingStateProps & RouteComponentProps;
 
 const AVAILABLE_NETWORKS = ['main', 'rinkeby'];
 
-const Landing: FunctionComponent<Props> = ({ network, wallet, termsConditionsAccepted, history }) => {
+const Landing: FunctionComponent<Props> = ({ network, wallet, history }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [hidePrev, setHidePrev] = useState(true);
   const [hideNext, setHideNext] = useState(false);
@@ -107,9 +105,7 @@ const Landing: FunctionComponent<Props> = ({ network, wallet, termsConditionsAcc
 
   const handleGetStarted = useCallback(
     () => {
-      if (!termsConditionsAccepted) {
-        history.push('/terms-conditions');
-      } else if (!wallet || !network) {
+      if (!wallet || !network) {
         history.push('/select-wallet');
       } else if (network && !AVAILABLE_NETWORKS.includes(network)) {
         history.push('/network-not-available');
@@ -117,7 +113,7 @@ const Landing: FunctionComponent<Props> = ({ network, wallet, termsConditionsAcc
         history.push('/auctions');
       }
     },
-    [termsConditionsAccepted, network, wallet, history],
+    [network, wallet, history],
   );
 
   return (
@@ -324,7 +320,6 @@ function mapStateToProps(state: AppState): LandingStateProps {
   return {
     network: getNetworkType(state),
     wallet: state.blockchain.wallet,
-    termsConditionsAccepted: isTermsConditionsAccepted(state),
   };
 }
 

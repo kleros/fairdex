@@ -7,7 +7,6 @@ import Logos from '../../components/Logos';
 import Separator from '../../components/Separator';
 import * as images from '../../images';
 import { getNetworkType, init } from '../../store/blockchain';
-import { isTermsConditionsAccepted } from '../../store/terms-conditions';
 import spinner from './spinner';
 import { Container, Content } from './utils';
 
@@ -16,7 +15,6 @@ type Props = AppStateProps & DispatchProps;
 interface AppStateProps {
   network?: Network | null;
   wallet?: Wallet;
-  termsConditionsAccepted: boolean;
 }
 
 interface DispatchProps {
@@ -25,12 +23,7 @@ interface DispatchProps {
 
 const AVAILABLE_NETWORKS = ['main', 'rinkeby'];
 
-const SelectWallet: FunctionComponent<Props> = ({
-  network,
-  wallet,
-  termsConditionsAccepted,
-  onSelectWallet,
-}) => {
+const SelectWallet: FunctionComponent<Props> = ({ network, wallet, onSelectWallet }) => {
   const handleWalletSelection = useCallback(
     (selected: Wallet) => {
       if (onSelectWallet) {
@@ -42,9 +35,7 @@ const SelectWallet: FunctionComponent<Props> = ({
 
   const selectWallet = (selected: Wallet) => () => handleWalletSelection(selected);
 
-  if (!termsConditionsAccepted) {
-    return <Redirect to='/terms-conditions' />;
-  } else if (wallet && !network) {
+  if (wallet && !network) {
     handleWalletSelection(wallet);
     return spinner;
   } else if (wallet && network && !AVAILABLE_NETWORKS.includes(network)) {
@@ -144,7 +135,6 @@ function mapStateToProps(state: AppState): AppStateProps {
   return {
     network: getNetworkType(state),
     wallet: state.blockchain.wallet,
-    termsConditionsAccepted: isTermsConditionsAccepted(state),
   };
 }
 
