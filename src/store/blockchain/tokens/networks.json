@@ -7,12 +7,12 @@
       "address": "0x4dbba835bfb14e8abae3e525bbf2f26340110527"
     }
   },
-  "ERC20Badge": {
+  "DutchXBadge": {
     "main": {
-      "address": "0xcb4aae35333193232421e86cd2e9b6c91f3b125f"
+      "address": "0x6e06861cefc3d6ea24483d3f1fe80759a73524b4"
     },
     "kovan": {
-      "address": "0x78895ec026aeff2db73bc30e623c39e1c69b1386"
+      "address": "0xb3b888988e4f6e581e8108fd73416d57a935c093"
     }
   },
   "T2CR": {

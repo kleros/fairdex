@@ -72,10 +72,10 @@ export function loadTokens() {
     const accountAddress = getCurrentAccount(getState());
     const network = getNetworkType(getState());
 
-    const erc20Badge = getBadgeContract(networks.ERC20Badge[network].address);
+    const dutchXBadge = getBadgeContract(networks.DutchXBadge[network].address);
     const trueCryptosystemBadge = getBadgeContract(networks.TrueCryptosystemBadge[network].address);
-    const [tokensWithERC20Badge, tokensWithTrueCryptosystemBadge] = await Promise.all([
-      erc20Badge.getAddressesWithBadge(),
+    const [tokensWithDutchXBadge, tokensWithTrueCryptosystemBadge] = await Promise.all([
+      dutchXBadge.getAddressesWithBadge(),
       trueCryptosystemBadge.getAddressesWithBadge(),
     ]);
 
@@ -83,7 +83,7 @@ export function loadTokens() {
       networks.TokensView[network].address,
       networks.T2CR[network].address,
     );
-    const tokenIDs = await tokensView.getTokensIDsForAddresses(tokensWithERC20Badge);
+    const tokenIDs = await tokensView.getTokensIDsForAddresses(tokensWithDutchXBadge);
     const whitelist = new TokenWhitelist(
       (await tokensView.getTokens(tokenIDs)).map(token => ({
         ...token,
