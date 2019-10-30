@@ -1,3 +1,0 @@
-interface TermsConditionsState {
-  accepted: boolean;
-}
