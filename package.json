@@ -1,7 +1,10 @@
 {
   "name": "@kleros/fairdex",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "license": "GPLv3",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "webpack --mode production",
     "lint": "tslint --project tsconfig.json --format codeFrame 'src/**/*.{ts,tsx}'",
