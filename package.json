@@ -1,8 +1,7 @@
 {
-  "name": "@dfairdex/dx-bidder-ui",
-  "version": "1.0.7",
+  "name": "@kleros/fairdex",
+  "version": "1.0.9",
   "license": "GPLv3",
-  "private": true,
   "scripts": {
     "build": "webpack --mode production",
     "lint": "tslint --project tsconfig.json --format codeFrame 'src/**/*.{ts,tsx}'",
