@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
+const path = require('path');
 
 module.exports = (env, { mode }) => ({
   resolve: {
@@ -7,7 +8,8 @@ module.exports = (env, { mode }) => ({
   },
 
   output: {
-    publicPath: '/',
+    publicPath: '/fairdex-dist/',
+    path: path.resolve(__dirname, 'fairdex-dist/'),
   },
 
   module: {
