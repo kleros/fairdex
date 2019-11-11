@@ -73,10 +73,10 @@ export function loadTokens() {
     const network = getNetworkType(getState());
 
     const erc20Badge = getBadgeContract(networks.ERC20Badge[network].address);
-    const trueCryptosystemBadge = getBadgeContract(networks.DutchXBadge[network].address);
+    const dutchXBadge = getBadgeContract(networks.DutchXBadge[network].address);
     const [tokensWithERC20Badge, tokensWithDutchXBadge] = await Promise.all([
       erc20Badge.getAddressesWithBadge(),
-      trueCryptosystemBadge.getAddressesWithBadge(),
+      dutchXBadge.getAddressesWithBadge(),
     ]);
 
     const tokensView = getTokensViewContract(

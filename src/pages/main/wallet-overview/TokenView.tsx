@@ -35,6 +35,9 @@ const TokenView = ({ data: token, ethBalance }: TokenViewProps & AppStateProps) 
       <Title title={token.symbol} data-testid={`token-card-title-${token.address}`}>
         <span>{token.symbol}</span>
       </Title>
+      <Subtitle title={token.name}>
+        <span>{token.name}</span>
+      </Subtitle>
       {isWeth(token) && <WrapUnwrapForm token={token} />}
     </Header>
     <Table>
@@ -152,6 +155,12 @@ const Header = styled.header`
 const Title = styled.h3`
   font-size: 2em;
   font-weight: 900;
+  color: var(--color-light-grey-blue);
+`;
+
+const Subtitle = styled.h4`
+  font-size: 1em;
+  font-weight: 500;
   color: var(--color-light-grey-blue);
 `;
 

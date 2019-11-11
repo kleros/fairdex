@@ -27,7 +27,7 @@ class BadgeContract extends BaseContract {
       const result = await this.contract.methods
         .queryAddresses(
           lastAddress, // A token address to start/end the query from. Set to zero means unused.
-          200, // Number of items to return at once.
+          120, // Number of items to return at once.
           filter,
           true, // Return oldest first.
         )

@@ -1,10 +1,17 @@
 import React, { HTMLAttributes } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 import * as images from '../images';
 
 const Logos = (props: HTMLAttributes<HTMLDivElement>) => (
   <Wrapper {...props}>
+    <Row>
+      <Proto>
+        <a href={'https://protofire.io'} target='_blank' rel='noopener noreferrer'>
+          Built by <img src={images.protofire} />
+        </a>
+      </Proto>
+    </Row>
     <Row>
       <Geco>
         <img src={images.geco} />
