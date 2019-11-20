@@ -5,6 +5,7 @@ interface TokenStatus {
   etherScanLink?: string;
   decimals?: number;
   hasTrueCryptosystemBadge?: boolean;
+  usingFallbackDecimals?: boolean;
 }
 
 class TokenWhitelist {

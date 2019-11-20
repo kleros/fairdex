@@ -5,11 +5,16 @@ import { toDecimal, ZERO } from '../../../contracts/utils';
 import { loadAuctions } from '../auctions';
 import { getCurrentAccount, getNetworkType } from '../web3';
 
+import Erc20Token from '../../../contracts/Erc20Token';
 import networks from './networks.json';
 import { getAllTokens } from './selectors';
 import TokenWhitelist from './whitelist';
 
 export * from './selectors';
+
+const DECIMALS_DICTIONARY: any = {
+  '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a': 9, // DGD
+};
 
 // Actions
 const UPDATE_ETH_BALANCE = 'UPDATE_ETH_BALANCE';
@@ -87,8 +92,35 @@ export function loadTokens() {
     const whitelist = new TokenWhitelist(
       (await tokensView.getTokens(tokenIDs)).map(token => ({
         ...token,
+        tradeable: true,
         hasDutchXBadge: tokensWithDutchXBadge.includes(token.address),
       })),
+    );
+
+    const tokens = whitelist.whitelist || [];
+
+    await Promise.all(
+      tokens
+        .filter(token => token.decimals === 0)
+        .map(async token => {
+          try {
+            const tokenContract = new Erc20Token(token.address);
+            const decimals = (await tokenContract.attemptFetchDecimals()).toNumber();
+            token.decimals = decimals;
+          } catch (err) {
+            // Missing decimals for this token.
+            // Contract does not implement decimals function. Check dictionary of known tokens.
+            // If not present, assume 18 decimal places.
+            if (DECIMALS_DICTIONARY[token.address.toLowerCase()] != null) {
+              // Use value from dictionary.
+              token.decimals = DECIMALS_DICTIONARY[token.address.toLowerCase()];
+            } else {
+              // Use default 18.
+              token.decimals = 18;
+              token.usingFallbackDecimals = true;
+            }
+          }
+        }),
     );
 
     if (accountAddress) {
@@ -97,49 +129,6 @@ export function loadTokens() {
       });
 
       dispatch(setMarkets(markets));
-
-      const tokenAddresses = markets.reduce<Set<Address>>(
-        (addresses, [token1, token2]) => addresses.add(token1).add(token2),
-        new Set(),
-      );
-
-      // Load tokens that require special treatment
-      const [wethAddress, owlAddress] = await Promise.all([dx.getEthTokenAddress(), dx.getOwlAddress()]);
-      const [isWethListed, isOwlListed] = [tokenAddresses.has(wethAddress), tokenAddresses.has(owlAddress)];
-
-      if (!isWethListed) {
-        tokenAddresses.add(wethAddress);
-      }
-
-      if (!isOwlListed) {
-        tokenAddresses.add(owlAddress);
-      }
-
-      // Create contract instance for each whitelisted token
-      const tokens = await Promise.all(
-        Array.from(tokenAddresses.values()).map<Promise<Token>>(async tokenAddress => {
-          const token = await getErc20Contract(tokenAddress).getTokenInfo();
-
-          const whitelisted = whitelist.getTokenData(tokenAddress);
-          if (whitelisted) {
-            token.hasDutchXBadge = whitelisted.hasDutchXBadge;
-            token.name = token.name || whitelisted.name;
-            token.symbol = token.symbol || whitelisted.symbol;
-          }
-
-          // Tokens are tradeable by default
-          token.tradeable = true;
-
-          if (tokenAddress === owlAddress) {
-            token.tradeable = isOwlListed;
-          } else if (tokenAddress === wethAddress) {
-            token.tradeable = isWethListed;
-          }
-
-          return token;
-        }),
-      );
-
       dispatch(setTokens(tokens));
 
       if (tokens.length > 0) {
@@ -168,9 +157,9 @@ export function updateBalances() {
 
           const [contractBalance, walletBalance, priceEth, allowance] = await Promise.all([
             dx.getBalance(token, accountAddress),
-            tokenContract.getBalance(accountAddress),
+            tokenContract.getBalance(accountAddress, token.decimals),
             dx.getPriceOfTokenInLastAuction(token),
-            tokenContract.getAllowance(accountAddress, dx.address),
+            tokenContract.getAllowance(accountAddress, dx.address, token.decimals),
           ]);
 
           return {
@@ -210,7 +199,7 @@ export const updateTokenAllowance = (token: Token) => {
     const currentAccount = getCurrentAccount(getState());
     const tokenContract = getErc20Contract(token.address);
 
-    const allowance = await tokenContract.getAllowance(currentAccount, window.dx.address);
+    const allowance = await tokenContract.getAllowance(currentAccount, window.dx.address, token.decimals);
 
     dispatch(setTokenAllowance(token.address, allowance));
   };
