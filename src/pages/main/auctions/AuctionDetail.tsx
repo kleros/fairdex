@@ -77,7 +77,7 @@ const Content = ({ auction }: ContentProp) => (
                     {' '}
                     {auction.buyToken}
                     &ensp;
-                    <InfoIcon />
+                    <InfoIcon style={{ marginRight: '2px' }} />
                   </small>
                 </span>
               )}
@@ -99,7 +99,7 @@ const Content = ({ auction }: ContentProp) => (
                     {' '}
                     {auction.buyToken}
                     &ensp;
-                    <InfoIcon />
+                    <InfoIcon style={{ marginRight: '2px' }} />
                   </small>
                 </span>
               )}
@@ -203,7 +203,7 @@ const Content = ({ auction }: ContentProp) => (
                     {' '}
                     {auction.buyToken}
                     &ensp;
-                    <InfoIcon />
+                    <InfoIcon style={{ marginRight: '2px' }} />
                   </small>
                 </span>
               )}
@@ -266,7 +266,7 @@ const Content = ({ auction }: ContentProp) => (
                     {' '}
                     {auction.buyToken}
                     &ensp;
-                    <InfoIcon />
+                    <InfoIcon style={{ marginRight: '2px' }} />
                   </small>
                 </span>
               )}
