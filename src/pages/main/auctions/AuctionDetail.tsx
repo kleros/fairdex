@@ -30,7 +30,7 @@ interface OwnProps extends HTMLAttributes<HTMLDivElement> {
 
 type Props = StateProps & OwnProps;
 
-const DEFAULT_DECIMALS = 3;
+const DEFAULT_DECIMALS = 6;
 
 const AuctionDetail = ({ auction, onClickOutside, onEscPress, isOpen }: Props) => {
   return (

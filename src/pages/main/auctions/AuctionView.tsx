@@ -32,7 +32,7 @@ interface DispatchProps {
 
 type Props = AuctionViewProps & DispatchProps;
 
-const DEFAULT_DECIMALS = 3;
+const DEFAULT_DECIMALS = 6;
 
 const AuctionView = React.memo(({ data: auction, onCardClick, dispatch, ...props }: Props) => {
   const [isMouseDown, setIsMouseDown] = useState(false);
