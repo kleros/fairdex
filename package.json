@@ -1,6 +1,6 @@
 {
   "name": "@kleros/fairdex",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "license": "GPLv3",
   "files": [
     "fairdex-dist"
@@ -13,7 +13,8 @@
     "start": "webpack-dev-server --mode development --hot --open",
     "test": "jest",
     "test:coverage": "jest --coverage --colors",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch",
+    "publishPkg": "yarn build && yarn publish"
   },
   "dependencies": {
     "@gnosis.pm/dx-contracts": "^2.0.0",

@@ -76,5 +76,6 @@ module.exports = (env, { mode }) => ({
   devServer: {
     historyApiFallback: true,
     host: '0.0.0.0',
+    contentBase: path.join(__dirname, 'fairdex-dist'),
   },
 });
