@@ -50,16 +50,18 @@ export async function getAuctionInfo(sellToken: Token, buyToken: Token, auctionI
         dx.getBuyVolume(sellToken, buyToken, auctionIndex),
       ]);
 
-      const auction: EndedAuction = {
-        ...data,
-        state: 'ended',
-        auctionStart: endedAuctionStart,
-        auctionEnd,
-        buyVolume: bidVolume,
-        closingPrice,
-      };
+      if ((auctionEnd && bidVolume.isPositive()) || (!isClosed && isTheoreticalClosed)) {
+        const auction: EndedAuction = {
+          ...data,
+          state: 'ended',
+          auctionStart: endedAuctionStart,
+          auctionEnd,
+          buyVolume: bidVolume,
+          closingPrice,
+        };
 
-      return auction;
+        return auction;
+      }
     } else {
       const previousClosingPrice = await dx.getPreviousClosingPrice(sellToken, buyToken, auctionIndex);
 
