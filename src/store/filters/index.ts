@@ -10,7 +10,7 @@ const initialState: FiltersState = {
   auctionSortBy: 'end-time',
   auctionSortDir: 'desc',
   onlyMyTokens: false,
-  claimableAuctions: true,
+  claimableAuctions: false,
   hideZeroBalance: false,
   tokenSortBy: 'token-name',
   tokenSortDir: 'asc',

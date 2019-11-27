@@ -50,7 +50,10 @@ export async function getAuctionInfo(sellToken: Token, buyToken: Token, auctionI
         dx.getBuyVolume(sellToken, buyToken, auctionIndex),
       ]);
 
-      if ((auctionEnd && bidVolume.isPositive()) || (!isClosed && isTheoreticalClosed)) {
+      if (
+        (auctionEnd && bidVolume.isPositive()) ||
+        (!isClosed && isTheoreticalClosed && closingPrice.value.isFinite())
+      ) {
         const auction: EndedAuction = {
           ...data,
           state: 'ended',
