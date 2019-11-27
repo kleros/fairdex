@@ -12,7 +12,7 @@ const initialState: FiltersState = {
   onlyMyTokens: false,
   claimableAuctions: false,
   hideZeroBalance: false,
-  tokenSortBy: 'token-name',
+  tokenSortBy: 'total-balance',
   tokenSortDir: 'asc',
   tokenSearchQuery: '',
 };
