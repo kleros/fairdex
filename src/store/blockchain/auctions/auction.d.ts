@@ -40,4 +40,5 @@ interface EndedAuction extends AuctionData {
   auctionStart: number;
   auctionEnd: number;
   closingPrice: Fractional;
+  isTheoreticalClosed?: boolean;
 }

@@ -255,6 +255,8 @@ const Content = ({ auction }: ContentProp) => (
             <Value>
               {auction.closingPrice === undefined ? (
                 <Loading />
+              ) : auction.isTheoreticalClosed ? (
+                'Pending'
               ) : (
                 <span title={getClosingPriceRate(auction)}>
                   <DecimalValue
@@ -305,6 +307,8 @@ const Content = ({ auction }: ContentProp) => (
             <Value>
               {auction.buyVolume === undefined ? (
                 <Loading />
+              ) : auction.isTheoreticalClosed ? (
+                'Pending'
               ) : (
                 <>
                   <DecimalValue value={auction.buyVolume} decimals={DEFAULT_DECIMALS} />
@@ -315,12 +319,26 @@ const Content = ({ auction }: ContentProp) => (
           </Row>
           <Row>
             <Label>Start time</Label>
-            <Value>{auction.auctionStart ? <Timestamp value={auction.auctionStart} /> : <Loading />}</Value>
+            <Value>
+              {auction.auctionStart ? (
+                <Timestamp value={auction.auctionStart} />
+              ) : auction.isTheoreticalClosed ? (
+                'Pending'
+              ) : (
+                <Loading />
+              )}
+            </Value>
           </Row>
           <Row>
             <Label>End time</Label>
             <Value>
-              {auction.auctionEnd === undefined ? <Loading /> : <Timestamp value={auction.auctionEnd} />}
+              {auction.auctionEnd === undefined ? (
+                <Loading />
+              ) : auction.isTheoreticalClosed ? (
+                'Pending'
+              ) : (
+                <Timestamp value={auction.auctionEnd} />
+              )}
             </Value>
           </Row>
         </Table>

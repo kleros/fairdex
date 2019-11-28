@@ -1,6 +1,6 @@
 {
   "name": "@kleros/fairdex",
-  "version": "1.0.23",
+  "version": "1.0.24",
   "license": "GPLv3",
   "files": [
     "fairdex-dist"

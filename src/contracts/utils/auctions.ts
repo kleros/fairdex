@@ -1,4 +1,4 @@
-import { addHours, isAfter } from 'date-fns';
+import { addHours } from 'date-fns';
 
 import { formatNumber, fromDecimal, toBigNumber, toDecimal, ZERO } from './decimal';
 
@@ -50,10 +50,7 @@ export async function getAuctionInfo(sellToken: Token, buyToken: Token, auctionI
         dx.getBuyVolume(sellToken, buyToken, auctionIndex),
       ]);
 
-      if (
-        (auctionEnd && bidVolume.isPositive()) ||
-        (!isClosed && isTheoreticalClosed && closingPrice.value.isFinite())
-      ) {
+      if ((auctionEnd && bidVolume.isPositive()) || (!isClosed && isTheoreticalClosed)) {
         const auction: EndedAuction = {
           ...data,
           state: 'ended',
@@ -61,6 +58,7 @@ export async function getAuctionInfo(sellToken: Token, buyToken: Token, auctionI
           auctionEnd,
           buyVolume: bidVolume,
           closingPrice,
+          isTheoreticalClosed,
         };
 
         return auction;

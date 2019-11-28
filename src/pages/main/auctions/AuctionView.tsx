@@ -257,6 +257,8 @@ const AuctionView = React.memo(({ data: auction, onCardClick, dispatch, ...props
               <Value>
                 {auction.closingPrice === undefined ? (
                   <Loading />
+                ) : auction.isTheoreticalClosed ? (
+                  'Pending'
                 ) : (
                   <span title={getClosingPriceRate(auction)}>
                     <DecimalValue
@@ -292,6 +294,8 @@ const AuctionView = React.memo(({ data: auction, onCardClick, dispatch, ...props
               <Value>
                 {auction.buyVolume === undefined ? (
                   <Loading />
+                ) : auction.isTheoreticalClosed ? (
+                  'Pending'
                 ) : (
                   <>
                     <DecimalValue value={auction.buyVolume} decimals={DEFAULT_DECIMALS} />
@@ -303,7 +307,13 @@ const AuctionView = React.memo(({ data: auction, onCardClick, dispatch, ...props
             <Row>
               <Label>End time</Label>
               <Value>
-                {auction.auctionEnd === undefined ? <Loading /> : <Timestamp value={auction.auctionEnd} />}
+                {auction.auctionEnd === undefined ? (
+                  <Loading />
+                ) : auction.isTheoreticalClosed ? (
+                  'Pending'
+                ) : (
+                  <Timestamp value={auction.auctionEnd} />
+                )}
               </Value>
             </Row>
           </Table>
