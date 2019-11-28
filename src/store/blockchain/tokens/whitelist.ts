@@ -4,7 +4,6 @@ interface TokenStatus {
   symbol: string;
   etherScanLink?: string;
   decimals?: number;
-  hasTrueCryptosystemBadge?: boolean;
   usingFallbackDecimals?: boolean;
 }
 

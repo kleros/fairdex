@@ -93,16 +93,6 @@ function filterTokens(tokens: Map<Address, Token>, filters: FiltersState) {
   }
 
   out = out.sort((a: Token, b: Token) => {
-    if (a.hasTrueCryptosystemBadge && !b.hasTrueCryptosystemBadge) {
-      return -1;
-    }
-    if (!a.hasTrueCryptosystemBadge && b.hasTrueCryptosystemBadge) {
-      return 1;
-    }
-    return 0;
-  });
-
-  out = out.sort((a: Token, b: Token) => {
     if (a.symbol === 'WETH' && b.symbol !== 'WETH') {
       return -1;
     }
