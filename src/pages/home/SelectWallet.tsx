@@ -49,7 +49,7 @@ const SelectWallet: FunctionComponent<Props> = ({ network, wallet, onSelectWalle
     return (
       <Container>
         <Content>
-          <h2>Wallet Detected</h2>
+          <h2>No Wallet Detected</h2>
           <Separator />
           <h5>Please install a wallet</h5>
           <WalletList>
