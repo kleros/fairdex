@@ -77,18 +77,15 @@ class DutchExchange extends BaseContract<Event> {
   }
 
   async getAvailableMarkets(fromBlock = this.initialBlock) {
-    const intervals = await this.getSweepIntervals(fromBlock)
+    const intervals = await this.getSweepIntervals(fromBlock);
     const markets = (await Promise.all(
-      intervals.map(
-        interval => this.contract.getPastEvents(
-          'NewTokenPair',
-          {
-            fromBlock: interval.fromBlock,
-            toBlock: interval.toBlock
-          }
-        )
-      )
-    )).reduce((acc, curr) => [...acc, ...curr])
+      intervals.map(interval =>
+        this.contract.getPastEvents('NewTokenPair', {
+          fromBlock: interval.fromBlock,
+          toBlock: interval.toBlock,
+        }),
+      ),
+    )).reduce((acc, curr) => [...acc, ...curr]);
 
     return markets.map<[Address, Address]>(log => {
       const { buyToken, sellToken } = log.returnValues;
@@ -98,19 +95,16 @@ class DutchExchange extends BaseContract<Event> {
   }
 
   async getBuyOrders(account: Address, fromBlock = this.initialBlock) {
-    const intervals = await this.getSweepIntervals(fromBlock)
+    const intervals = await this.getSweepIntervals(fromBlock);
     const buyOrders = (await Promise.all(
-      intervals.map(
-        interval => this.contract.getPastEvents(
-          'NewBuyOrder',
-          {
-            fromBlock: interval.fromBlock,
-            toBlock: interval.toBlock,
-            filter: { user: account }
-          }
-        )
-      )
-    )).reduce((acc, curr) => [...acc, ...curr])
+      intervals.map(interval =>
+        this.contract.getPastEvents('NewBuyOrder', {
+          fromBlock: interval.fromBlock,
+          toBlock: interval.toBlock,
+          filter: { user: account },
+        }),
+      ),
+    )).reduce((acc, curr) => [...acc, ...curr]);
 
     return Object.values(
       buyOrders.reduce<{ [key: string]: BuyOrder }>((all, { blockNumber, returnValues: result }) => {
@@ -144,16 +138,16 @@ class DutchExchange extends BaseContract<Event> {
     auctionIndex: string,
     fromBlock = this.initialBlock,
   ) {
-    const intervals = await this.getSweepIntervals(fromBlock)
+    const intervals = await this.getSweepIntervals(fromBlock);
     const [event] = (await Promise.all(
-      intervals.map(
-        interval => this.contract.getPastEvents('AuctionCleared', {
+      intervals.map(interval =>
+        this.contract.getPastEvents('AuctionCleared', {
           fromBlock: interval.fromBlock,
           toBlock: interval.toBlock,
           filter: { sellToken: sellToken.address, buyToken: buyToken.address, auctionIndex },
-        })
-      )
-    )).reduce((acc, curr) => [...acc, ...curr])
+        }),
+      ),
+    )).reduce((acc, curr) => [...acc, ...curr]);
 
     if (event) {
       const block = await web3.eth.getBlock(event.blockNumber);
@@ -173,16 +167,16 @@ class DutchExchange extends BaseContract<Event> {
     fromBlock = this.initialBlock,
   ) {
     const tokens = await this.contract.methods.getTokenOrder(sellToken.address, buyToken.address).call();
-    const intervals = await this.getSweepIntervals(fromBlock)
+    const intervals = await this.getSweepIntervals(fromBlock);
     const [event] = (await Promise.all(
-      intervals.map(
-        interval => this.contract.getPastEvents('AuctionStartScheduled', {
+      intervals.map(interval =>
+        this.contract.getPastEvents('AuctionStartScheduled', {
           fromBlock: interval.fromBlock,
           toBlock: interval.toBlock,
           filter: { sellToken: tokens[0], buyToken: tokens[1], auctionIndex },
-        })
-      )
-    )).reduce((acc, curr) => [...acc, ...curr])
+        }),
+      ),
+    )).reduce((acc, curr) => [...acc, ...curr]);
 
     if (event) {
       return event.returnValues.auctionStart * 1_000;
@@ -262,10 +256,10 @@ class DutchExchange extends BaseContract<Event> {
     fromBlock = this.initialBlock,
   ) {
     if (auctionIndex) {
-      const intervals = await this.getSweepIntervals(fromBlock)
+      const intervals = await this.getSweepIntervals(fromBlock);
       const [event] = (await Promise.all(
-        intervals.map(
-          interval => this.contract.getPastEvents('AuctionCleared', {
+        intervals.map(interval =>
+          this.contract.getPastEvents('AuctionCleared', {
             fromBlock: interval.fromBlock,
             toBlock: interval.toBlock,
             filter: {
@@ -273,9 +267,9 @@ class DutchExchange extends BaseContract<Event> {
               buyToken: buyToken.address,
               auctionIndex,
             },
-          })
-        )
-      )).reduce((acc, curr) => [...acc, ...curr])
+          }),
+        ),
+      )).reduce((acc, curr) => [...acc, ...curr]);
 
       if (event) {
         return toDecimal(event.returnValues.sellVolume, sellToken.decimals);
@@ -304,10 +298,10 @@ class DutchExchange extends BaseContract<Event> {
     fromBlock = this.initialBlock,
   ) {
     if (auctionIndex) {
-      const intervals = await this.getSweepIntervals(fromBlock)
+      const intervals = await this.getSweepIntervals(fromBlock);
       const [event] = (await Promise.all(
-        intervals.map(
-          interval => this.contract.getPastEvents('AuctionCleared', {
+        intervals.map(interval =>
+          this.contract.getPastEvents('AuctionCleared', {
             fromBlock: interval.fromBlock,
             toBlock: interval.toBlock,
             filter: {
@@ -315,9 +309,9 @@ class DutchExchange extends BaseContract<Event> {
               buyToken: buyToken.address,
               auctionIndex,
             },
-          })
-        )
-      )).reduce((acc, curr) => [...acc, ...curr])
+          }),
+        ),
+      )).reduce((acc, curr) => [...acc, ...curr]);
 
       if (event) {
         return toDecimal(event.returnValues.buyVolume, buyToken.decimals);
@@ -394,18 +388,18 @@ class DutchExchange extends BaseContract<Event> {
     // Fetching event logs in a single request can (this was happening) cause
     // the provider to timeout the request.
     // To get around this we can split it into multiple, smaller requests.
-    const { number: currentBlock } = await  web3.eth.getBlock()
-    const totalBlocks = currentBlock - fromBlock
-    const BLOCKS_PER_REQUEST = 200000
-    const numRequests = Math.ceil(totalBlocks / BLOCKS_PER_REQUEST)
-    const intervals = [{ fromBlock, toBlock: fromBlock + BLOCKS_PER_REQUEST}]
+    const { number: currentBlock } = await web3.eth.getBlock();
+    const totalBlocks = currentBlock - fromBlock;
+    const BLOCKS_PER_REQUEST = 200000;
+    const numRequests = Math.ceil(totalBlocks / BLOCKS_PER_REQUEST);
+    const intervals = [{ fromBlock, toBlock: fromBlock + BLOCKS_PER_REQUEST }];
     for (let i = 1; i < numRequests; i++) {
       intervals[i] = {
-        fromBlock: intervals[i-1].toBlock + 1,
-        toBlock: intervals[i-1].toBlock + 1 + BLOCKS_PER_REQUEST
-      }
+        fromBlock: intervals[i - 1].toBlock + 1,
+        toBlock: intervals[i - 1].toBlock + 1 + BLOCKS_PER_REQUEST,
+      };
     }
-    return intervals
+    return intervals;
   }
 }
 
