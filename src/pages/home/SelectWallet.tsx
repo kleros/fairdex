@@ -76,16 +76,14 @@ const SelectWallet: FunctionComponent<Props> = ({ network, wallet, onSelectWalle
         <Content>
           <h2>Select Wallet</h2>
           <Separator />
-          <WalletList>
-            <Wallet onClick={selectWallet('standard')}>
-              <WalletLogos>
-                <img src={images.wallet.MetaMask} alt='MetaMask' />
-                <img src={images.wallet.Safe} alt='Gnosis Safe' />
-              </WalletLogos>
-              <h3>Standard Wallet</h3>
-              <p>MetaMask, Safe</p>
-            </Wallet>
-          </WalletList>
+          <Wallet onClick={selectWallet('standard')}>
+            <WalletLogos>
+              <img src={images.wallet.MetaMask} alt='MetaMask' />
+              <img src={images.wallet.Safe} alt='Gnosis Safe' />
+            </WalletLogos>
+            <h3>Standard Wallet</h3>
+            <p>MetaMask, Safe</p>
+          </Wallet>
         </Content>
         <Logos />
       </Container>
