@@ -24,6 +24,9 @@ interface DispatchProps {
 const AVAILABLE_NETWORKS = ['main', 'rinkeby'];
 
 const SelectWallet: FunctionComponent<Props> = ({ network, wallet, onSelectWallet }) => {
+  const handleInstallWalletSelection = useCallback(link => window.open(link, '_blank'), []);
+  const installWallet = (link: string) => () => handleInstallWalletSelection(link);
+
   const handleWalletSelection = useCallback(
     (selected: Wallet) => {
       if (onSelectWallet) {
@@ -42,6 +45,31 @@ const SelectWallet: FunctionComponent<Props> = ({ network, wallet, onSelectWalle
     return <Redirect to='/network-not-available' />;
   } else if (wallet && network) {
     return <Redirect to='/auctions' />;
+  } else if (!window.web3 && !window.ethereum) {
+    return (
+      <Container>
+        <Content>
+          <h2>Wallet Detected</h2>
+          <Separator />
+          <h5>Please install a wallet</h5>
+          <WalletList>
+            <Wallet onClick={installWallet('https://metamask.io')}>
+              <WalletLogos>
+                <img src={images.wallet.MetaMask} alt='MetaMask' />
+              </WalletLogos>
+              <h3>Metamask</h3>
+            </Wallet>
+            <Wallet onClick={installWallet('https://gnosis-safe.io/')}>
+              <WalletLogos>
+                <img src={images.wallet.Safe} alt='Gnosis Safe' />
+              </WalletLogos>
+              <h3>Gnosis Safe</h3>
+            </Wallet>
+          </WalletList>
+        </Content>
+        <Logos />
+      </Container>
+    );
   } else {
     return (
       <Container>
@@ -53,20 +81,10 @@ const SelectWallet: FunctionComponent<Props> = ({ network, wallet, onSelectWalle
               <WalletLogos>
                 <img src={images.wallet.MetaMask} alt='MetaMask' />
                 <img src={images.wallet.Safe} alt='Gnosis Safe' />
-                {/* <img src={images.wallet.Cipher} alt='Cipher' /> */}
               </WalletLogos>
               <h3>Standard Wallet</h3>
-              <p>MetaMask, Safe{/*, Cipher */}</p>
+              <p>MetaMask, Safe</p>
             </Wallet>
-            {/*
-              <Wallet disabled={true} onClick={selectWallet('ledger')}>
-                <Logos>
-                  <img src={images.wallet.LedgerNano} alt='Ledger Nano' />
-                </Logos>
-                <h3>Ledger Nano</h3>
-                <p />
-              </Wallet>
-              */}
           </WalletList>
         </Content>
         <Logos />
@@ -81,7 +99,7 @@ const WalletList = styled.div`
   margin: var(--spacing-normal) 0 0;
 
   @media (min-width: 801px) {
-    grid-template-columns: 1fr /*1fr*/;
+    grid-template-columns: 1fr 1fr;
   }
 `;
 
