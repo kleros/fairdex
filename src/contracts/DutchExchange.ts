@@ -388,7 +388,7 @@ class DutchExchange extends BaseContract<Event> {
     // Fetching event logs in a single request can (this was happening) cause
     // the provider to timeout the request.
     // To get around this we can split it into multiple, smaller requests.
-    const { number: currentBlock } = await web3.eth.getBlock();
+    const { number: currentBlock } = await web3.eth.getBlock('latest');
     const totalBlocks = currentBlock - fromBlock;
     const BLOCKS_PER_REQUEST = 200000;
     const numRequests = Math.ceil(totalBlocks / BLOCKS_PER_REQUEST);
