@@ -390,7 +390,7 @@ class DutchExchange extends BaseContract<Event> {
     // To get around this we can split it into multiple, smaller requests.
     const { number: currentBlock } = await web3.eth.getBlock('latest');
     const totalBlocks = currentBlock - fromBlock;
-    const BLOCKS_PER_REQUEST = 200000;
+    const BLOCKS_PER_REQUEST = 1000000;
     const numRequests = Math.ceil(totalBlocks / BLOCKS_PER_REQUEST);
     const intervals = [{ fromBlock, toBlock: fromBlock + BLOCKS_PER_REQUEST }];
     for (let i = 1; i < numRequests; i++) {
